@@ -2,7 +2,6 @@ import numpy as np
 import torch
 
 
-# =======================================训练后剪枝============================================
 def zero_out(p, thre):
     p = p.cpu().detach().numpy()
     zero_out_idx = np.nonzero(abs(p) < thre) 
@@ -10,7 +9,6 @@ def zero_out(p, thre):
     return torch.tensor(p)
 
 
-# 训练中计算稀疏：小于阈值的权值数量
 def train_sparsity(model, thre):
     tol_filter_num = 0
     for name, param in model.named_parameters():
@@ -37,7 +35,6 @@ def train_sparsity(model, thre):
     return weight_sapr, filter_sapr
 
 
-# 训练中计算稀疏：小于阈值的权值数量
 def conv_sparsity(model, thre):
     conv_list = []
     filter_num = 0
