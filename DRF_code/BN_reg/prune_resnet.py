@@ -127,7 +127,7 @@ if __name__ == '__main__':
         # bn 模块
         if isinstance(m0, nn.BatchNorm2d):
             idx1 = np.squeeze(np.argwhere(np.asarray(end_mask.cpu().detach().numpy())))
-            # 保证列表为1 的时候 不输出空值
+
             if idx1.size == 1:
                 idx1 = np.resize(idx1, (1,))
 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
                 end_mask = cfg_mask[layer_id_in_cfg]
         # conv 模块
         elif isinstance(m0, nn.Conv2d):
-            if conv_count == 0:  # 第一个   3 channel,
+            if conv_count == 0:
                 idx0 = np.squeeze(np.argwhere(np.asarray(start_mask.cpu().detach().numpy())))
                 idx1 = np.squeeze(np.argwhere(np.asarray(end_mask.cpu().detach().numpy())))
 
@@ -151,15 +151,14 @@ if __name__ == '__main__':
                     idx0 = np.resize(idx0, (1,))
                 if idx1.size == 1:
                     idx1 = np.resize(idx1, (1,))
-                # 注意卷积核Tensor维度为[n, c, w, h]，两个卷积层连接，下一层的输入维度n就等于当前层的c
                 w1 = m0.weight.data[:, idx0.tolist(), :, :].clone()
                 w1 = w1[idx1.tolist(), :, :, :].clone()
                 m1.weight.data = w1.clone()
                 # print(0, conv_count)
 
             else:
-                if args.depth == 18:    # 增加shortcut 版本每三层就一个 1*1 kernel
-                    if conv_count != 7 and conv_count != 12 and conv_count != 17:  # 前两层  要C 做dump C
+                if args.depth == 18:   
+                    if conv_count != 7 and conv_count != 12 and conv_count != 17:  
                         idx0 = np.squeeze(np.argwhere(np.asarray(start_mask.cpu().detach().numpy())))
                         idx1 = np.squeeze(np.argwhere(np.asarray(end_mask.cpu().detach().numpy())))
                         # chann = idx0
@@ -168,12 +167,11 @@ if __name__ == '__main__':
                             idx0 = np.resize(idx0, (1,))
                         if idx1.size == 1:
                             idx1 = np.resize(idx1, (1,))
-                        # # # 注意卷积核Tensor维度为[n, c, w, h]，两个卷积层连接，下一层的输入维度n就等于当前层的c
                         w1 = m0.weight.data[:, idx0.tolist(), :, :].clone()
                         w1 = w1[idx1.tolist(), :, :, :].clone()
                         m1.weight.data = w1.clone()
 
-                    else:  # dump 卷积
+                    else: 
                         # idx0 = np.squeeze(np.argwhere(np.asarray(start_mask.cpu().detach().numpy())))
                         # idx1 = np.squeeze(np.argwhere(np.asarray(end_mask.cpu().detach().numpy())))
                         m1.weight.data = m0.weight.data.clone()
