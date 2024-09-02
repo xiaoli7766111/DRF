@@ -42,15 +42,11 @@ parser.add_argument('--depth', default=18, type=int, help='depth of network Vgg(
 parser.add_argument('--dataset', type=str, default='cifar10', help='training dataset ( data.cifar10 / mnist)')
 
 # the threshold and the pruned threshold
-parser.add_argument('--thre', default=0.004, type=int, help='the threshold of network')
 parser.add_argument('--prune_thre', default=0.0001, type=int, help='the threshold of weight')
-parser.add_argument('--bn_thre', default=0.0002, type=int, help='the threshold of weight')
 
-# 解析参数
 args = parser.parse_args(args=[])
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
-# 设置随机种子
 if args.seed:
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
@@ -58,17 +54,11 @@ if args.seed:
     random.seed(args.seed)
     torch.backends.cudnn.deterministic = True
 
-
-# 存储models文件路径
 if not os.path.exists(args.save):
     os.makedirs(args.save)
 
 train_loader, test_loader = dataset.data_set(args.cuda, args.dataset, args.batch_size, args.test_batch_size)
-
-# 模型选择
 model = models.__dict__[args.arch](dataset=args.dataset, depth=args.depth)
-
-# 设置cuda
 model.cuda() if args.cuda else {}
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.wd)
 
@@ -91,24 +81,10 @@ def train(epoch_):
         data, target = Variable(data), Variable(target)
         optimizer.zero_grad()
         output = model(data)
-
-        # ==================================  ssl3  version  ======================================
-        # loss_increase = ssl3.ssl_loss(model, args.thre)
-        # ==================================   DP version  =======================================
-        # loss_increase = reg_max.bn_change_loss(model, args.thre)    # vgg
-        # ==================================   DP version3  =======================================
-        # rega = reg_increase_0.bn_each_weight(model, args.thre)
-        # tt = reg_increase_0.reg_select(rega)
-        # loss_increase = reg_increase_0.bn_loss(model, tt)  # vgg
-        # # print(loss_increase)
-        # loss = f.cross_entropy(output, target) + loss_increase
-        # baseline
         loss = f.cross_entropy(output, target)
-
         _, pred = output.data.max(1, keepdim=True)
 
         loss.backward()
-        # update_bn()
         optimizer.step()
 
         if batch_idx % args.log_interval == 0:
@@ -140,8 +116,6 @@ def the_test():
 
 def main():
     best_prec_num = 0.
-
-    # 对learning_rate 进行处理
     for epoch in range(args.start_epoch, args.epochs):
         if epoch in [args.epochs * 0.5, args.epochs * 0.75]:
             for param_group in optimizer.param_groups:
@@ -154,7 +128,6 @@ def main():
         t_end = time.time()
         print(f"each epoch use time: {t_end - t_star:.3f} s "
               f"\nweight sparsity {wig:.3f}%", f"\t filter sparsity {fil:.3f}%")
-        # 返回的是 准确率
         prec, info = the_test()
         print(info)
         savepath = os.path.join(args.save, f"{args.arch}_{args.dataset}_{args.epochs}info.txt")
