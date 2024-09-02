@@ -15,7 +15,7 @@ def train_sparsity(model, thre):
         if 'conv' in name:
             tol_filter_num += param.nelement()
 
-    sparsity_zero = 0   # 网络总体的零值数量
+    sparsity_zero = 0  
     zero_filter_num, filter_num = 0, 0
 
     for name, param in model.state_dict().items():
