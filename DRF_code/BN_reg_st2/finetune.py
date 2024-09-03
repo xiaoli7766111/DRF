@@ -50,7 +50,7 @@ parser.add_argument('--thre', default=0.0009, type=int, help='the threshold of n
 parser.add_argument('--prune_thre', default=0.0001, type=int, help='the threshold of weight')
 parser.add_argument('--bn_thre', default=0.0002, type=int, help='the threshold of weight')
 
-args = parser.parse_args(args=[])
+args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 if args.seed:
