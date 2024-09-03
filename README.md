@@ -13,26 +13,24 @@ pip install -r requirements.txt  # install
 
 ##  Train
 
-**由于我们为了更贴合设计的组正则化项，从头开始进行训练**
+**BN_reg is the code for pruning strategy I of ResNets.**<br> **BN_reg_st2 is the code for pruning strategy II of ResNets.**
 
-BN_reg        为修剪策略一 <br>
-BN_reg_st2    为修剪策略二 <br>
 <br>
 
 ```bash
 main.py
 ```
-Inference with main 进行模型训练，得到预训练文件
+Training with main.py
 
 ##  Finetune
-Inference with finetune 使用组正则化项进行微调
+**finetuning with finetune.pyfinetune.py**<br>
 ```bash
 finetune.py
 ```
 
 ##  Pruning
-prune_vgg.py 对Vgg模型进行压缩，使模型的计算量与存储量减少 <br>
-prune_resnet.py 对ResNet模型进行压缩，去除冗余的结构
+ **Using prune_vgg.py to prune VGGNet** <br>
+**Using prune_resnet.py to prune ResNet** <br>
 ```bash
 prune_vgg.py
 
@@ -40,7 +38,7 @@ prune_resnet.py
 ```
 
 ##  Retrain
-最后可选择性使用 retrain 恢复压缩对模型的影响 
+**Finally, the impact of compression on the model can be selectively restored using retrain.py** <br>
 ```bash
 retrain.py
 ```
