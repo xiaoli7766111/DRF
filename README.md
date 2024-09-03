@@ -1,7 +1,7 @@
 # Install
 
 <p align="center">  
-  Clone repo and install requirements.txt in a Python>=3.8.0 environment, including PyTorch>=1.8.
+ Clone repo and install requirements.txt in a Python>=3.8.0 environment, including PyTorch>=1.8.
 </p>   
 
 
@@ -20,10 +20,10 @@ pip install -r requirements.txt  # install
 ```bash
 main.py
 ```
-Training with main.py
+**Training with main.py**
 
 ##  Finetune
-**finetuning with finetune.pyfinetune.py**<br>
+**finetuning with finetune.py**<br>
 ```bash
 finetune.py
 ```
