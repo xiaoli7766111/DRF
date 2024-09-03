@@ -44,7 +44,7 @@ parser.add_argument('--dataset', type=str, default='cifar10', help='training dat
 # the threshold and the pruned threshold
 parser.add_argument('--prune_thre', default=0.0001, type=int, help='the threshold of weight')
 
-args = parser.parse_args(args=[])
+args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 if args.seed:
