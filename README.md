@@ -18,14 +18,14 @@ pip install -r requirements.txt  # install
 <br>
 
 ```bash
-main.py
+python main.py --batch-size=256 --epochs=200 --arch=Resnet 
 ```
 **Training with main.py**
 
 ##  Finetune
 **finetuning with finetune.py**<br>
 ```bash
-finetune.py
+python finetune.py --batch-size=256 --epochs=100 --thre=0.004 --prune_thre=0.0001 --bn_thre=0.0002
 ```
 
 ##  Pruning
