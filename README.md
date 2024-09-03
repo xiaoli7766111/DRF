@@ -1,6 +1,7 @@
-See below for quickstart examples.
+<p align="center">  
 Install
 Clone repo and install requirements.txt in a Python>=3.8.0 environment, including PyTorch>=1.8.
+</p>   
 
 git clone https://github.com//xiaoli7766111/DRF  # clone
 pip install -r requirements.txt  # install
