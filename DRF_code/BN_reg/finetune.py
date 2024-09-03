@@ -36,17 +36,14 @@ parser.add_argument('--weight-decay', default=1e-4, type=float, help='weight dec
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
 parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed')
 
-# 数值达到多少时输出信息 与保存地址
 parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--save', default='NNN/r18_st1/ssl6xxxx', type=str, metavar='PATH',
                     help='path to save prune model (default: current directory)')
 
-# 模型名称 与模型参数(层数)
 parser.add_argument('--arch', default='Resnet', type=str, help='architecture to use')
 parser.add_argument('--depth', default=18, type=int, help='depth of the neural network')
 
-# 重训练的模型
 parser.add_argument('--refine', default='logs_baseline/r18/Resnet_cifar10_200.model', type=str, metavar='PATH',
                     help='path to the pruned model to be inc4 tuned')
 
@@ -55,11 +52,9 @@ parser.add_argument('--thre', default=0.004, type=int, help='the threshold of ne
 parser.add_argument('--prune_thre', default=0.0001, type=int, help='the threshold of weight')
 parser.add_argument('--bn_thre', default=0.0002, type=int, help='the threshold of weight')
 
-# 解析参数
-args = parser.parse_args(args=[])
+args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
-# 设置随机种子
 if args.seed:
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
@@ -67,8 +62,6 @@ if args.seed:
     random.seed(args.seed)
     torch.backends.cudnn.deterministic = True
 
-
-# 不存在就创建文件夹 存放----文件
 if not os.path.exists(args.save):
     os.makedirs(args.save)
 
@@ -104,7 +97,6 @@ def train(epoch_):
         data, target = Variable(data), Variable(target)
         optimizer.zero_grad()
         output = model(data)
-        # ==================================      max     =========================================
         loss_increase = reg_ratio_max0.bn_change_loss(model, args.thre)
 
         loss = f.cross_entropy(output, target) + loss_increase
